@@ -402,7 +402,15 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     RETableViewSection *section = [self.mutableSections objectAtIndex:indexPath.section];
-    id item = [section.items objectAtIndex:indexPath.row];
+    id item;
+    @try {
+        if (section.items.count > 0) {
+            item = [section.items objectAtIndex:section.items.count >= indexPath.row + 1 ? indexPath.row : 0];
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"RETableViewManager %@", exception);
+    }
     
     // Forward to UITableView delegate
     //
