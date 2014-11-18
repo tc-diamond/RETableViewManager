@@ -145,7 +145,7 @@
 - (Class)classForCellAtIndexPath:(NSIndexPath *)indexPath
 {
     RETableViewSection *section = [self.mutableSections objectAtIndex:indexPath.section];
-    NSObject *item = [section.items objectAtIndex:indexPath.row];
+    NSObject *item = [section.items objectAtIndex: section.items.count > indexPath.row ? indexPath.row : 0];
     return [self.registeredClasses objectForKey:item.class];
 }
 
@@ -402,15 +402,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     RETableViewSection *section = [self.mutableSections objectAtIndex:indexPath.section];
-    id item;
-    @try {
-        if (section.items.count > 0) {
-            item = [section.items objectAtIndex:section.items.count >= indexPath.row + 1 ? indexPath.row : 0];
-        }
-    }
-    @catch (NSException *exception) {
-        NSLog(@"RETableViewManager %@", exception);
-    }
+    id item = [section.items objectAtIndex:section.items.count > indexPath.row ? indexPath.row : 0];
     
     // Forward to UITableView delegate
     //
